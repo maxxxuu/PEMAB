@@ -1,0 +1,17 @@
+venv/
+*.log
+*.png
+*.pt
+*.csv
+*.pdf
+*.eps
+note*.md
+.DS_Store
+run/*/results
+results/
+hp_results/
+.idea/
+runs/
+plots/
+result_analyser/ray_tune/
+playgroud/
