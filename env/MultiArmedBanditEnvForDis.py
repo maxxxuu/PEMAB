@@ -4,7 +4,7 @@ import copy
 import numpy as np
 import itertools
 
-from slot_machine.MultiArmedBandit import MultiArmedBandit
+from env.slot_machine.MultiArmedBandit import MultiArmedBandit
 from env.abstract.Environment import AbstractEnvironment
 
 """

@@ -418,7 +418,7 @@ def main():
 
     max_rwd_perc = 0
 
-    for _ in tqdm(range(repeat)):
+    for rep in tqdm(range(repeat)):
         current_rwd_perc = 0
         for round_nb in round_nbs:
             for episode in range(num_episodes):
@@ -446,11 +446,11 @@ def main():
                     if round_nr >= round_nb:
                         done = True
                         # Done Reinforcement
-                        state_, next_state_, action_, reward_, done_ = organise_experience(
-                            [experience for i in range(batch_size)])
-                        assert state_.shape == next_state_.shape == (batch_size, machine_nb * len(state_keys))
-                        assert action_.shape == reward_.shape == done_.shape == (batch_size,)
-                        loss = agent.update_q_function(state_, action_, reward_, next_state_, done_)
+                        # state_, next_state_, action_, reward_, done_ = organise_experience(
+                        #     [experience for i in range(batch_size)])
+                        # assert state_.shape == next_state_.shape == (batch_size, machine_nb * len(state_keys))
+                        # assert action_.shape == reward_.shape == done_.shape == (batch_size,)
+                        # loss = agent.update_q_function(state_, action_, reward_, next_state_, done_)
 
                     state = next_state
                     total_reward += reward
@@ -473,7 +473,7 @@ def main():
 
                 if episode % 10 == 0:
                     agent.old_q_network = agent.q_network
-                    win_per_temp = test_agent(agent, num_episodes=10, train_epoch=episode, path="test_data.csv", repeat=_)
+                    win_per_temp = test_agent(agent, num_episodes=10, train_epoch=episode, path="test_data.csv", repeat=rep)
 
                 # # Early stop
                 # if total_loss <= 1:
@@ -490,7 +490,8 @@ def main():
         if current_rwd_perc > max_rwd_perc:
             max_rwd_perc = current_rwd_perc
             print(f"Current best reward perc: {max_rwd_perc}")
-            agent.export_model()
+            agent.export_model("best_agent.pt")
+        agent.export_model(f"agent{rep}.pt")
 
 
 if __name__ == '__main__':

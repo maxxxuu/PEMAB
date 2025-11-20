@@ -3,33 +3,31 @@ import os
 import logging
 import csv
 
+from pathlib import Path
+
+# Ensure project root is in sys.path so top-level imports resolve when
+# running this script directly. Project root (PEMAB) is 3 parents above.
+project_root = Path(__file__).resolve().parents[3]
+if str(project_root) not in sys.path:
+    sys.path.insert(0, str(project_root))
+
+from run_script.utils import prepare_results_directory
+
 import torch
 import torch.nn as nn
 import torch.optim as optim
 import numpy as np
 import matplotlib.pyplot as plt # type: ignore
 import copy
+import os
 from collections import deque
 import random
 from typing import Deque, Union, Iterable
 from tqdm import tqdm
-from pathlib import Path
-
-# Ensure project root is in sys.path so imports like `agent.*` and `env.*` work
-# when running this script directly. The project root (PEMAB) is 3 parents
-# above this file: (.../run_script/vanilla/with_dr/vanilla_dr.py).
-project_root = Path(__file__).resolve().parents[3]
-if str(project_root) not in sys.path:
-    sys.path.insert(0, str(project_root))
 
 from agent.model.layer.PESymetry import PESymetryMean
 from env.MultiArmedBanditEnvForPESym import MultiArmedBanditEnvForPESym
 from agent.algo.UCB import UCB1
-from run_script.utils import prepare_results_directory
-
-# TEST_DIR will be set in main(); keep as None so importing this module
-# doesn't create directories or start training.
-TEST_DIR = None
 
 """
 Please note that the assertion in this script is specific to our current MAB problem in Q learning,
@@ -43,10 +41,10 @@ round_nbs = [200]
 PWIN = 0.9
 
 # Environment parameters
+output_dim = 1  # Number of actions of each indiv
 lr = 0.00003  # Learning rate
 gamma = 0.99  # Discount factor
 machine_nb = 10
-output_dim = machine_nb
 reward_distris: list[float] = [0.1 for _ in range(machine_nb)]
 reward_distris[5] = PWIN
 # reward_distris = None
@@ -71,30 +69,29 @@ env_config = {
     "reward": win_reward,
     "display": display,
 }
-# Note: `env` will be created inside `main()` so importing this module
-# won't run the environment/training loops.
+
+# `env` will be created in main(); avoid creating it on import
+env = None
 
 env_config_ucb = copy.deepcopy(env_config)
 # env_config_ucb["reward"] = 10
 # env_ucb = MultiArmedBanditEnvForPESym(
 #     **env_config_ucb)
 
+TEST_DIR = None
+
 
 def _ensure_test_dirs_and_logging():
-    """Create plots dir and configure logging when TEST_DIR is available."""
     global TEST_DIR
     if TEST_DIR is None:
         return
-
-    plot_dir_path = os.path.join(TEST_DIR, 'plots')
-    os.makedirs(plot_dir_path, exist_ok=True)
+    plot_dir = os.path.join(TEST_DIR, 'plots')
+    os.makedirs(plot_dir, exist_ok=True)
 
     log_path = os.path.join(TEST_DIR, 'record.log')
-    file_exist = os.path.isfile(log_path)
-    if not file_exist:
-        # create an empty log file
-        with open(log_path, 'w') as f_object:
-            f_object.close()
+    if not os.path.isfile(log_path):
+        with open(log_path, 'w'):
+            pass
     logging.basicConfig(filename=log_path, level=logging.DEBUG)
 
 """ --- Pooling mix Idv ---"""
@@ -104,7 +101,7 @@ neuron_nb_factor = 5
 class QNetwork(nn.Module):
     def __init__(self, input_dim: int, output_dim: int) -> None:
         super(QNetwork, self).__init__()
-        fc_layers = [
+        pe_layers = [
             nn.Linear(input_dim, input_dim * neuron_nb_factor),
             nn.ELU(),
             # nn.Tanh(),
@@ -114,17 +111,17 @@ class QNetwork(nn.Module):
             # nn.LeakyReLU(),
             nn.Linear(input_dim * neuron_nb_factor, output_dim),
         ]
-        self.nn = nn.Sequential(*fc_layers)
+        self.nn = nn.Sequential(*pe_layers)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         # e.g. [0,0,10]
         # 3 cases correspond to: training with batches, and choosing action on a single step
-        assert (x.shape == (batch_size, machine_nb * len(state_keys)) or x.shape == (machine_nb * len(state_keys),))
+        assert (x.shape == (batch_size, machine_nb, len(state_keys)) or x.shape == (machine_nb, len(state_keys)))
 
         output: torch.Tensor = self.nn(x)
         # reveal_type(output)
 
-        output_shape = (x.shape[0], machine_nb) if len(x.shape) == 2 else (machine_nb,)
+        output_shape = (x.shape[0], x.shape[1], 1) if len(x.shape) == 3 else (x.shape[0], 1)
 
         assert output.shape == output_shape
 
@@ -132,32 +129,30 @@ class QNetwork(nn.Module):
 
 
 class QLearningAgent:
-    def __init__(self, input_dim: int, output_dim: int, lr: float, gamma: float, ind_nb: int =2) -> None:
+    def __init__(self, input_dim: int, output_dim: int, lr: float, gamma: float, ind_nb: int = 2) -> None:
         self.old_q_network: QNetwork = QNetwork(input_dim, output_dim)
         self.q_network: QNetwork = QNetwork(input_dim, output_dim)
         self.optimizer: optim.Optimizer = optim.Adam(self.q_network.parameters(), lr=lr)
         self.gamma: float = gamma
         self.ind_nb: int = ind_nb
 
-
     def select_action(self, state: np.ndarray, epsilon: float) -> np.integer:
         # assert types
         assert type(state) == np.ndarray
         # print(state)
-        # assert state.shape == (10,batch_size)  # check shape
-        assert state.shape == (machine_nb * len(state_keys),)
+        # assert state.shape == (10,batch_size)  # why
+        assert state.shape == (machine_nb, len(state_keys))
         assert type(epsilon) == float
-        
+
         if np.random.rand() < epsilon:
             action = np.random.choice(range(self.ind_nb))
         else:
             with torch.no_grad():
                 # print(type(state))
                 q_values = self.q_network(torch.tensor(state, dtype=torch.float32))
-                assert q_values.shape == (machine_nb,)
+                assert q_values.shape == (machine_nb, 1)
                 action = torch.argmax(q_values).item()
                 action = np.int64(action)
-
 
         assert isinstance(action, np.integer)
         return action
@@ -165,7 +160,7 @@ class QLearningAgent:
     def update_q_function(self, state: torch.Tensor, action: torch.Tensor, reward: torch.Tensor,
                           next_state: torch.Tensor, done: torch.Tensor) -> torch.Tensor:
 
-        assert state.shape == (batch_size, machine_nb * len(state_keys))
+        assert state.shape == (batch_size, machine_nb, len(state_keys))
         self.optimizer.zero_grad()
         s = state.clone().detach()
         assert s.shape == state.shape
@@ -175,7 +170,7 @@ class QLearningAgent:
 
         q_values = self.q_network(s)
 
-        q_shape = (state.shape[0], machine_nb)
+        q_shape = (state.shape[0], state.shape[1], 1)
         assert q_values.shape == q_shape
 
         with torch.no_grad():
@@ -186,7 +181,7 @@ class QLearningAgent:
         # if done:
         #     target_q_value = reward
         # else:
-        target_q_value = reward + (1 - done) * self.gamma * torch.max(next_q_values, dim=-1)[0].squeeze()
+        target_q_value = reward + (1 - done) * self.gamma * torch.max(next_q_values, dim=-2)[0].squeeze()
 
         # Only the maximum among all actions are selected to be calculated as target Q
         assert target_q_value.shape == (state.shape[0],)
@@ -208,7 +203,6 @@ class QLearningAgent:
         return loss
 
     def export_model(self, path="agent.pt"):
-        # Save model into TEST_DIR by default
         if path is None or not os.path.isabs(path):
             if TEST_DIR is not None:
                 path = os.path.join(TEST_DIR, path or 'agent.pt')
@@ -228,11 +222,9 @@ def generate_q_plot(agent: QLearningAgent, e: int) -> None:
     while not done:
         # Select action greedily based on Q-values
         with torch.no_grad():
-            state = state.flatten()
-            assert state.shape == (machine_nb * len(state_keys),)
+            assert state.shape == (machine_nb, len(state_keys))
             q_values = agent.q_network(torch.tensor(state, dtype=torch.float32))
-            q_values.unsqueeze_(dim=-1)
-            assert q_values.shape == (machine_nb,1)
+            assert q_values.shape == (machine_nb, 1)
             q_plot += [q_values.numpy()]
             action = torch.argmax(q_values).item()
             assert type(action) == int
@@ -270,10 +262,9 @@ def generate_q_plot(agent: QLearningAgent, e: int) -> None:
     plt.plot(range(R_NR), [(2 * PWIN - 1) * (1 - gamma ** (R_NR - i)) / (1 - gamma) for i in range(R_NR)], 'b--')
     plt.xlabel('round')
     plt.ylabel('Q')
-    # Determine plot directory at runtime (TEST_DIR may be set later)
-    plot_dir_path = os.path.join(TEST_DIR, 'plots') if TEST_DIR is not None else os.getcwd()
-    os.makedirs(plot_dir_path, exist_ok=True)
-    plt.savefig(os.path.join(plot_dir_path, f'rounds_{R_NR}_ep_{e}.pdf'))
+    plot_dir = os.path.join(TEST_DIR, 'plots') if TEST_DIR is not None else os.getcwd()
+    os.makedirs(plot_dir, exist_ok=True)
+    plt.savefig(os.path.join(plot_dir, f'rounds_{R_NR}_ep_{e}.pdf'))
     plt.close()
 
 
@@ -284,7 +275,7 @@ def organise_experience(
     assert len(experience) == batch_size
     state1_batch = torch.stack([torch.tensor(s1, dtype=torch.float32) for (s1, a, r, s2, d) in experience])
     state2_batch = torch.stack([torch.tensor(s2, dtype=torch.float32) for (s1, a, r, s2, d) in experience])
-    assert state1_batch.shape == state2_batch.shape == (len(experience), machine_nb * len(state_keys))
+    assert state1_batch.shape == state2_batch.shape == (len(experience), machine_nb, len(state_keys))
 
     action_batch = torch.Tensor([a for (s1, a, r, s2, d) in experience])
     reward_batch = torch.Tensor([r for (s1, a, r, s2, d) in experience])
@@ -294,13 +285,15 @@ def organise_experience(
     assert action_batch.shape == reward_batch.shape == done_batch.shape == (len(experience),)
     return state1_batch, state2_batch, action_batch, reward_batch, done_batch
 
+
 # testing the agent
 
 # Function to test the trained agent
 def test_agent(agent: QLearningAgent, num_episodes: int = 10, train_epoch: Union[None, int]=None,
                path=None, repeat=None) -> float:
+
     if path is not None:
-        # If a relative path is passed, place it under TEST_DIR (if set), else use relative path
+        # Prefer placing relative files under TEST_DIR if available
         if not os.path.isabs(path):
             path = os.path.join(TEST_DIR, path) if TEST_DIR is not None else os.path.abspath(path)
 
@@ -330,6 +323,7 @@ def test_agent(agent: QLearningAgent, num_episodes: int = 10, train_epoch: Union
     rwd_agent = 0
     rwd_baseline = 0.1
     for episode in range(num_episodes):
+        print(f"test {episode}")
         # state = [R_NR]
         state = env.reset()
         env_config_ucb["reward_distris"] = env.get_rwd_dist()
@@ -341,10 +335,8 @@ def test_agent(agent: QLearningAgent, num_episodes: int = 10, train_epoch: Union
         while not done:
             # Select action greedily based on Q-values
             with torch.no_grad():
-                state = state.flatten()
-                assert state.shape == (machine_nb * len(state_keys),)
+                assert state.shape == (machine_nb, len(state_keys))
                 q_values = agent.q_network(torch.tensor(state, dtype=torch.float32))
-                q_values.unsqueeze_(dim=-1)
                 assert q_values.shape == (machine_nb, 1)
                 action = torch.argmax(q_values).item()
                 assert type(action) == int
@@ -392,7 +384,7 @@ def test_agent(agent: QLearningAgent, num_episodes: int = 10, train_epoch: Union
 
     if path is not None:
         rows = [
-            {"agent_name": "FC",
+            {"agent_name": "Indiv",
              "epoch": train_epoch, "repeat": repeat,
              "best_action_count": best_action_count / num_episodes, "round_nb": R_NR}
         ]
@@ -400,26 +392,26 @@ def test_agent(agent: QLearningAgent, num_episodes: int = 10, train_epoch: Union
         f.close()
     return rwd_agent / rwd_baseline
 
+
+# Initialize agent
+max_rwd_perc = 0
 def main():
     global TEST_DIR
     global env
 
-    # Prepare results directory and configure logging/plots
     TEST_DIR = prepare_results_directory()
     _ensure_test_dirs_and_logging()
-
-    # Initialize environment and agent
-    env = MultiArmedBanditEnvForPESym(**env_config)
-
-    input_dim = machine_nb * env.get_state_size()
-    agent = QLearningAgent(input_dim, output_dim, lr, gamma)
-    experiences: Deque[tuple[list[list[int]], int, Union[int, float], list[list[int]], Union[bool, int]]] = (
-        deque(maxlen=memory_size))
 
     max_rwd_perc = 0
 
     for _ in tqdm(range(repeat)):
         current_rwd_perc = 0
+        env = MultiArmedBanditEnvForPESym(**env_config)
+        input_dim = env.get_state_size()
+        agent = QLearningAgent(input_dim, output_dim, lr, gamma)
+        experiences: Deque[tuple[list[list[int]], int, Union[int, float], list[list[int]], Union[bool, int]]] = (
+            deque(maxlen=memory_size))
+
         for round_nb in round_nbs:
             for episode in range(num_episodes):
                 env_config_train = copy.deepcopy(env_config)
@@ -432,13 +424,12 @@ def main():
                 done = False
                 round_nr = 0
                 total_loss: float = 0
-                state = state.flatten()
                 while not done:
-                    assert state.shape == (machine_nb * len(state_keys),)
+                    assert state.shape == (machine_nb, len(state_keys))
                     action = agent.select_action(state, epsilon)
 
                     next_state, reward, done = env_train.step(action=action, display=display)
-                    next_state = next_state.flatten()
+
                     experience: tuple = (state, action, reward, next_state, done)
                     experiences.append(experience)
 
@@ -446,30 +437,28 @@ def main():
                     if round_nr >= round_nb:
                         done = True
                         # Done Reinforcement
-                        state_, next_state_, action_, reward_, done_ = organise_experience(
-                            [experience for i in range(batch_size)])
-                        assert state_.shape == next_state_.shape == (batch_size, machine_nb * len(state_keys))
-                        assert action_.shape == reward_.shape == done_.shape == (batch_size,)
-                        loss = agent.update_q_function(state_, action_, reward_, next_state_, done_)
+                        # state_, next_state_, action_, reward_, done_ = organise_experience(
+                        #     [experience for i in range(batch_size)])
+                        # assert state_.shape == next_state_.shape == (batch_size, machine_nb, len(state_keys))
+                        # assert action_.shape == reward_.shape == done_.shape == (batch_size,)
+                        # loss = agent.update_q_function(state_, action_, reward_, next_state_, done_)
 
                     state = next_state
                     total_reward += reward
 
-
                     if len(experiences) >= batch_size:
                         minibatch = random.sample(experiences, batch_size)
                         state1_batch, state2_batch, action_batch, reward_batch, done_batch = organise_experience(minibatch)
-                        assert state1_batch.shape == state2_batch.shape == (batch_size, machine_nb * len(state_keys))
+                        assert state1_batch.shape == state2_batch.shape == (batch_size, machine_nb, len(state_keys))
                         assert action_batch.shape == reward_batch.shape == done_batch.shape == (batch_size,)
 
                         loss = agent.update_q_function(state1_batch, action_batch, reward_batch, state2_batch, done_batch)
                         total_loss += float(loss)
 
                 # print(f"Train episode {episode + 1}, Total Reward: {total_reward}")
-                if len(round_nbs) == 1:
-                    if episode % 1000 == 0:
-                        generate_q_plot(agent, episode)
-                        # print(f"Total loss: {total_loss}")
+                if episode % 100 == 0:
+                    generate_q_plot(agent, episode)
+                    # print(f"Total loss: {total_loss}")
 
                 if episode % 10 == 0:
                     agent.old_q_network = agent.q_network
@@ -486,11 +475,11 @@ def main():
             # # Test the agent
             print(f"Testing round_nb={round_nb}")
             current_rwd_perc += test_agent(agent)
-
         if current_rwd_perc > max_rwd_perc:
             max_rwd_perc = current_rwd_perc
             print(f"Current best reward perc: {max_rwd_perc}")
-            agent.export_model()
+            agent.export_model("best_agent.pt")
+        agent.export_model(f"agent{_}.pt")
 
 
 if __name__ == '__main__':

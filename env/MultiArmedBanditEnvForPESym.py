@@ -5,7 +5,7 @@ import numpy as np
 import itertools
 # from statsmodels.stats.proportion import proportion_confint
 
-from slot_machine.MultiArmedBandit import MultiArmedBandit
+from env.slot_machine.MultiArmedBandit import MultiArmedBandit
 from env.abstract.Environment import AbstractEnvironment
 from env.MultiArmedBanditEnvBase import MultiArmedBanditEnvBase
 

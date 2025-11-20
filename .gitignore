@@ -15,3 +15,5 @@ runs/
 plots/
 result_analyser/ray_tune/
 playgroud/
+.venv/
+__pycache__/

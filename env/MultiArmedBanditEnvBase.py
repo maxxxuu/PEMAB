@@ -8,7 +8,7 @@ import itertools
 from typing import Callable, Iterable, Union, Collection, Optional
 # from statsmodels.stats.proportion import proportion_confint
 
-from slot_machine.MultiArmedBandit import MultiArmedBandit
+from env.slot_machine.MultiArmedBandit import MultiArmedBandit
 from env.abstract.Environment import AbstractEnvironment
 from agent.result_recorder.TestResult import TestResult
 from agent.result_recorder.SingleResult import SingleResult

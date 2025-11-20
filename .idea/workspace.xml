@@ -5,60 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="584b38cb-7cc3-406c-9d01-8d205023849a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/PEMAB.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/agent/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/agent/abstract/AbstractAlgo.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/agent/abstract/AbstractModel.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/agent/abstract/AbstractResultRecorder.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/agent/abstract/Agent.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/agent/abstract/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/agent/algo/AlgoMAB.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/agent/algo/EpsilonGreedy.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/agent/algo/MaxRegret.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/agent/algo/MinRegret.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/agent/algo/RandomAction.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/agent/algo/ThompsonSampling.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/agent/algo/UCB.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/agent/algo/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/agent/algo/base_algo/BaseAlgo.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/agent/algo/base_algo/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/agent/model/DQN.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/agent/model/DRQN.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/agent/model/DisributedDQN.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/agent/model/DoubleDQN.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/agent/model/LstmDRQN.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/agent/model/MaxModels.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/agent/model/OneStepLstmRNN.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/agent/model/OneStepRNN.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/agent/model/SecuredDDQN.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/agent/model/SingleMachineDQN.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/agent/model/SumDQN.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/agent/model/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/agent/model/base_model/BaseModel.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/agent/model/base_model/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/agent/model/layer/PEA.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/agent/model/layer/PEPair.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/agent/model/layer/PEPoolingIdv.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/agent/model/layer/PESymetry.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/agent/model/layer/ScaledSelfAttention.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/agent/model/layer/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/agent/result_recorder/PlayHistory.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/agent/result_recorder/SingleResult.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/agent/result_recorder/TestResult.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/agent/result_recorder/TrainResult.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/agent/result_recorder/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/env/MultiArmedBanditEnvBase.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/env/MultiArmedBanditEnvForDis.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/env/MultiArmedBanditEnvForPESym.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/env/abstract/Environment.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/env/abstract/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/env/MultiArmedBanditEnvBase.py" beforeDir="false" afterPath="$PROJECT_DIR$/env/MultiArmedBanditEnvBase.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/env/MultiArmedBanditEnvForDis.py" beforeDir="false" afterPath="$PROJECT_DIR$/env/MultiArmedBanditEnvForDis.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/env/MultiArmedBanditEnvForPESym.py" beforeDir="false" afterPath="$PROJECT_DIR$/env/MultiArmedBanditEnvForPESym.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/run_script/vanilla/with_dr/vanilla_dr.py" beforeDir="false" afterPath="$PROJECT_DIR$/run_script/vanilla/with_dr/vanilla_dr.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -68,9 +19,9 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 4
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 4
+}</component>
   <component name="ProjectId" id="35IT9V1Ow2nyIzm1feTDiXVi2Xy" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
@@ -79,18 +30,145 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Python.pe_att_without_dr.executor": "Run",
+    "Python.pe_ind_pooling_without_dr.executor": "Run",
+    "Python.pe_ind_without_dr.executor": "Run",
+    "Python.vanilla_dr.executor": "Run",
+    "Python.vanilla_without_dr.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",
-    "last_opened_file_path": "/Users/zhuofan.xu/Downloads/PEMAB/run_script/pe_att"
+    "last_opened_file_path": "/Users/zhuofan.xu/Downloads/PEMAB/run_script/vanilla/with_dr"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/run_script/vanilla/with_dr" />
       <recent name="$PROJECT_DIR$/run_script/pe_att" />
       <recent name="$PROJECT_DIR$/run_script/pe_ind" />
       <recent name="$PROJECT_DIR$/run_script/pe_ind_pooling" />
       <recent name="$PROJECT_DIR$" />
     </key>
+  </component>
+  <component name="RunManager" selected="Python.pe_ind_pooling_without_dr">
+    <configuration name="pe_att_without_dr" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="PEMAB" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/run_script/pe_att/without_dr" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/run_script/pe_att/without_dr/pe_att_without_dr.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pe_ind_pooling_without_dr" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="PEMAB" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/run_script/pe_ind_pooling/without_dr" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/run_script/pe_ind_pooling/without_dr/pe_ind_pooling_without_dr.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pe_ind_without_dr" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="PEMAB" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/run_script/pe_ind/without_dr" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/run_script/pe_ind/without_dr/pe_ind_without_dr.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="vanilla_dr" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="PEMAB" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/run_script/vanilla/with_dr" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/run_script/vanilla/with_dr/vanilla_dr.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="vanilla_without_dr" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="PEMAB" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/run_script/vanilla/without_dr" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/run_script/vanilla/without_dr/vanilla_without_dr.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.pe_ind_pooling_without_dr" />
+        <item itemvalue="Python.pe_ind_without_dr" />
+        <item itemvalue="Python.pe_att_without_dr" />
+        <item itemvalue="Python.vanilla_without_dr" />
+        <item itemvalue="Python.vanilla_dr" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
