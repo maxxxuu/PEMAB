@@ -361,7 +361,7 @@ def test_agent(agent: QLearningAgent, num_episodes: int = 10, train_epoch: Union
 
         rwd_agent += total_reward
         logging.info(f"Test episode {episode + 1}, Total Reward: {total_reward}")
-        print(f"Test episode {episode + 1}, Total Reward: {total_reward}")
+        # print(f"Test episode {episode + 1}, Total Reward: {total_reward}")
 
         ''' --- UCB1 --- '''
 
@@ -375,12 +375,12 @@ def test_agent(agent: QLearningAgent, num_episodes: int = 10, train_epoch: Union
 
         rwd_baseline += ucb1_result.get_total_reward()
         logging.info(f"UCB1: {ucb1_result.get_total_reward()}")
-        print(f"UCB1: {ucb1_result.get_total_reward()}")
+        # print(f"UCB1: {ucb1_result.get_total_reward()}")
 
         ''' --- ---- ---'''
 
         logging.info(f"rwd_agent / rwd_baseline = {rwd_agent / rwd_baseline}")
-        print(f"rwd_agent / rwd_baseline = {rwd_agent / rwd_baseline}")
+        # print(f"rwd_agent / rwd_baseline = {rwd_agent / rwd_baseline}")
 
     if path is not None:
         rows = [
