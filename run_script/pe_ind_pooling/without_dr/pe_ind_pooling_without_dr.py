@@ -457,8 +457,8 @@ def main():
                         total_loss += float(loss)
 
                 # print(f"Train episode {episode + 1}, Total Reward: {total_reward}")
-                if episode % 100 == 0:
-                    generate_q_plot(agent, episode)
+                # if episode % 100 == 0:
+                #     generate_q_plot(agent, episode)
                     # print(f"Total loss: {total_loss}")
 
                 if episode % 10 == 0:
