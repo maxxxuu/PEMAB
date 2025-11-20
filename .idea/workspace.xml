@@ -6,10 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="584b38cb-7cc3-406c-9d01-8d205023849a" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/env/MultiArmedBanditEnvBase.py" beforeDir="false" afterPath="$PROJECT_DIR$/env/MultiArmedBanditEnvBase.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/env/MultiArmedBanditEnvForDis.py" beforeDir="false" afterPath="$PROJECT_DIR$/env/MultiArmedBanditEnvForDis.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/env/MultiArmedBanditEnvForPESym.py" beforeDir="false" afterPath="$PROJECT_DIR$/env/MultiArmedBanditEnvForPESym.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/run_script/vanilla/with_dr/vanilla_dr.py" beforeDir="false" afterPath="$PROJECT_DIR$/run_script/vanilla/with_dr/vanilla_dr.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/run_script/pe_att/without_dr/pe_att_without_dr.py" beforeDir="false" afterPath="$PROJECT_DIR$/run_script/pe_att/without_dr/pe_att_without_dr.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/run_script/pe_ind/without_dr/pe_ind_without_dr.py" beforeDir="false" afterPath="$PROJECT_DIR$/run_script/pe_ind/without_dr/pe_ind_without_dr.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/run_script/pe_ind_pooling/without_dr/pe_ind_pooling_without_dr.py" beforeDir="false" afterPath="$PROJECT_DIR$/run_script/pe_ind_pooling/without_dr/pe_ind_pooling_without_dr.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/run_script/vanilla/without_dr/vanilla_without_dr.py" beforeDir="false" afterPath="$PROJECT_DIR$/run_script/vanilla/without_dr/vanilla_without_dr.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

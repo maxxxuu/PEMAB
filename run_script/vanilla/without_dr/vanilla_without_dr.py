@@ -38,8 +38,8 @@ may need adjustment if the problem change
 
 R_NR = 200
 # round_nbs = [1] + [i * 5 for i in range(1, 101)]
-# round_nbs = [i * 10 for i in range(10, 21)]
-round_nbs = [200]
+round_nbs = [i * 10 for i in range(10, 21)]
+# round_nbs = [200]
 PWIN = 0.9
 
 # Environment parameters
